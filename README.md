@@ -94,4 +94,28 @@ loss_fn = CHULALoss(class_freqs, lambda_ce=1.0, lambda_unc=0.4, lambda_heu=0.6)
 loss = loss_fn(pred_logits, targets, uncertainty_map)
 ```
 
---
+---
+
+## 🧠 Citation
+
+```latex
+@article{panboonyuen2025chula,
+  title={CHULA: Custom Heuristic Uncertainty-guided Loss for Accurate Land Title Deed Segmentation},
+  author={Panboonyuen, Teerapong},
+  year={2025}
+}
+```
+
+---
+
+## 📬 Contact
+
+**Teerapong Panboonyuen**
+📧 \[[teerapong.pa@chula.ac.th](mailto:teerapong.pa@chula.ac.th)]
+📍 Chulalongkorn University, Bangkok, Thailand
+
+---
+
+© 2025 Teerapong Panboonyuen — Open for academic collaboration 🌏
+
+---
