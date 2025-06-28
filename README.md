@@ -60,8 +60,8 @@ It can be plugged into **any detection/segmentation model** (e.g., YOLOv12, Deep
 ### 📦 Setup
 
 ```bash
-git clone https://github.com/kaopanboonyuen/chula-loss.git
-cd chula-loss
+git clone https://github.com/kaopanboonyuen/CHULA.git
+cd CHULA
 pip install -r requirements.txt
 ````
 
