@@ -122,6 +122,6 @@ loss = loss_fn(pred_logits, targets, uncertainty_map)
 
 ---
 
-© 2025 Teerapong Panboonyuen — Open for academic collaboration 🌏
+© 2025 Teerapong Panboonyuen
 
 ---
