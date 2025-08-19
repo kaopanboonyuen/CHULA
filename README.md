@@ -7,6 +7,15 @@
 
 ---
 
+## 🚀 Try It Now: CHULA in Google Colab
+
+Instantly test CHULA Loss with YOLOv8 on a public medical pills dataset:  
+👉 **[Open CHULA Colab Demo](https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withMedicalPillsDetection.ipynb)**
+
+> 📜 _Due to restrictions surrounding access and distribution of Thai Land Title Deed data, this demo uses a public medical dataset to showcase CHULA’s flexibility across domains._
+
+---
+
 ## 🌏 Abstract
 
 **CHULA** (Custom Heuristic Uncertainty-guided Loss for Accurate Segmentation & Detection) is a next-generation loss function designed for **noisy, ambiguous, and structure-rich documents** such as **Thai land title deeds**.
