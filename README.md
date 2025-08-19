@@ -9,10 +9,20 @@
 
 ## 🚀 Try It Now: CHULA in Google Colab
 
-Instantly test CHULA Loss with YOLOv8 on a public medical pills dataset:  
-👉 **[Open CHULA Colab Demo](https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withMedicalPillsDetection.ipynb)**
+Instantly test **CHULA Loss** with **YOLOv8, v11, v12, or newer** on diverse public datasets:
 
-> 📜 _Due to restrictions surrounding access and distribution of Thai Land Title Deed data, this demo uses a public medical dataset to showcase CHULA’s flexibility across domains._
+👉 **[Medical Pills Dataset Demo](https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withMedicalPillsDetection.ipynb)**  
+👉 **[African Wildlife Detection Demo (Multi-class)](https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withAfricanWildlifeDetection.ipynb)** 🐘🦓🦒
+
+> 💡 _CHULA Loss is domain-agnostic and supports both **binary and multi-class** object detection tasks across medical, wildlife, and document datasets._
+
+This is a great opportunity to explore:
+
+- 🎯 CHULA’s robust **multi-class detection** capabilities  
+- ⚙️ Seamless integration with **YOLOv8, v11, v12**, and future versions  
+- 🚀 The **power and flexibility** of CHULA Loss for researchers and developers across domains
+
+> 📜 _Due to restrictions surrounding Thai Land Title Deed data, these demos use public datasets to highlight CHULA’s cross-domain adaptability._
 
 ---
 
