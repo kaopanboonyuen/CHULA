@@ -1,97 +1,116 @@
-# CHULA: Custom Heuristic Uncertainty-guided Loss for Accurate Land Title Deed Segmentation
+# 🌸 CHULA: Custom Heuristic Uncertainty-guided Loss for Accurate Land Title Deed Segmentation
 
-### 🧠 Author: Teerapong Panboonyuen  
-🚩 Supported by the Second Century Fund (C2F) Postdoctoral Fellowship, Chulalongkorn University  
-🧪 Reproducible, Pluggable, and Open Source for Document AI Research
+### 🧠 Author: Teerapong Panboonyuen
+
+🚩 Supported by the Second Century Fund (C2F) Postdoctoral Fellowship, Chulalongkorn University
+🧪 Reproducible • Plug-and-Play • Open Source for Document AI Research
 
 ---
 
 ## 🌏 Abstract
 
-**CHULA** is a novel **C**ustom **H**euristic **U**ncertainty-guided **L**oss for **A**ccurate segmentation and detection of Thai land title deeds. It combines:
+**CHULA** (Custom Heuristic Uncertainty-guided Loss for Accurate Segmentation & Detection) is a next-generation loss function designed for **noisy, ambiguous, and structure-rich documents** such as **Thai land title deeds**.
 
-- Class-balanced cross-entropy,
-- Aleatoric uncertainty modeling, and
-- Domain-specific heuristic priors.
+It combines:
 
-It can be plugged into **any detection/segmentation model** (e.g., YOLOv12, DeepLabv3+) to improve performance on noisy, ambiguous, and structure-rich documents.
+* ⚖️ **Class-balanced cross-entropy** for handling imbalanced data
+* 🌫️ **Aleatoric uncertainty modeling** for robustness against noise
+* 📜 **Domain-specific heuristics** tailored for document structures
 
-> 🚀 Achieved **61.3% mAP (AP₅₀:₉₅)** on a real-world Thai land deed benchmark — significantly better than standard baselines.
+> 🚀 Achieved **61.3% mAP (AP₅₀:₉₅)** on a real-world Thai land deed benchmark — outperforming standard baselines.
 
 ---
 
 ## 🎯 Key Contributions
 
-- ✅ A unified loss combining uncertainty, class balance, and document heuristics
-- ✅ Support for low-resource, underrepresented classes (e.g., PIN, STAMP)
-- ✅ Full training & plug-and-play code for YOLO, DeepLab, and more
-- ✅ Multi-task learning support (segmentation + detection)
+* ✅ Unified loss combining **uncertainty, class balance, and document heuristics**
+* ✅ Automatic **class weight computation** & **binary vs multi-class detection**
+* ✅ **Optional uncertainty branch** for YOLO without modifying its internals
+* ✅ Plug-and-play with **YOLOv8/YOLOv12, DeepLabv3+, UNet**, and more
+* ✅ Supports **multi-task learning** (segmentation + detection)
 
 ---
 
-## 🖼️ Results & Visuals
+## 📂 Repository Structure
 
-### 🔬 Accuracy vs Efficiency Trade-off
-![Accuracy-efficiency-trade-off](img/Accuracy-efficiency-trade-off.png)
+```
+chula/
+├─ chula/                 # Core package
+│  ├─ __init__.py
+│  ├─ loss.py             # CHULA loss implementation
+│  ├─ utils.py            # Class weights, helpers
+│
+├─ examples/              # Training & evaluation scripts
+│  ├─ yolov8_medical_pills.py   # Example: YOLOv8 with CHULA Loss
+│
+├─ img/                  # Figures for README
+│
+├─ setup.py              # Packaging script for PyPI
+├─ README.md             # Project documentation
+├─ LICENSE               # Open-source license
+```
 
-### ⏱️ Inference Latency Comparison
-![Inference Latency for YOLO](img/Inference_latency_comparison_for_YOLO_graph.png)
+📌 The **`examples/`** folder contains reproducible training scripts.
+
+* `yolov8_medical_pills.py` → shows how to apply CHULA Loss to YOLOv8 on a small medical pills dataset
+* You can easily adapt to your own dataset & model
 
 ---
 
-### 📊 Dataset Sample
-![Sample Dataset](img/Sample_Dataset_01.png)
+## 🚀 Quickstart
 
-### ✅ Sample Output with CHULA
-![CHULA Segmentation Result](img/Sample_Result_from_CHULA.png)
+### 📦 Install
 
----
-
-### 🔁 Convergence & FLOP Efficiency
-![Component and FLOP Analysis](img/Convergence_and_Component_Effects_and_FLOP_result.png)
-
-### 📈 Overall CHULA Performance
-![Accuracy Comparison](img/CHULA_Efficiency_and_overall_accuracy_comparison.png)
-
----
-
-## 🛠️ How to Use
-
-### 📦 Setup
+Clone and install:
 
 ```bash
 git clone https://github.com/kaopanboonyuen/CHULA.git
 cd CHULA
-pip install -r requirements.txt
-````
+pip install -e .
+```
 
-### 🧪 Train a DeepLabv3+ with CHULA loss
+Or (coming soon) directly from PyPI:
 
 ```bash
-python train.py --config config.yaml
-```
-
-📁 Directory format:
-
-```
-data/
-├── train/
-│   ├── images/
-│   └── masks/
-├── val/
-│   ├── images/
-│   └── masks/
+pip install chula
 ```
 
 ---
 
-### ⚙️ Integrate CHULA with Your Own Model (YOLO, UNet, etc.)
+### 🧪 Try in Google Colab
+
+Instantly test CHULA loss with YOLOv8 + Medical Pills dataset:
+👉 [Open CHULA Colab Notebook](https://colab.research.google.com/github/kaopanboonyuen/notebook/CHULA_LOSS_withMedicalPillsDetection.ipynb)
+
+---
+
+### ⚙️ Use with YOLOv8
 
 ```python
-from chula_loss import CHULALoss
+from chula.loss import CHULALoss
+from chula.utils import compute_class_weights
 
-loss_fn = CHULALoss(class_freqs, lambda_ce=1.0, lambda_unc=0.4, lambda_heu=0.6)
+# Auto-detect binary vs multi-class & compute weights
+class_weights = compute_class_weights("datasets/medical-pills", num_classes=1).cuda()
+
+loss_fn = CHULALoss(class_weights=class_weights, lambda_ce=1.0, lambda_unc=0.3, lambda_heu=0.5)
 loss = loss_fn(pred_logits, targets, uncertainty_map)
+```
+
+---
+
+### 📂 Dataset Structure (YOLO format)
+
+```
+datasets/
+├── medical-pills/
+│   ├── images/
+│   │   ├── train/
+│   │   └── val/
+│   ├── labels/
+│   │   ├── train/
+│   │   └── val/
+│   └── medical-pills.yaml
 ```
 
 ---
@@ -111,14 +130,14 @@ loss = loss_fn(pred_logits, targets, uncertainty_map)
 ## 📬 Contact
 
 **Teerapong Panboonyuen**
-📧 \[[teerapong.pa@chula.ac.th](mailto:teerapong.pa@chula.ac.th)]
+📧 [teerapong.pa@chula.ac.th](mailto:teerapong.pa@chula.ac.th)
 📍 Chulalongkorn University, Bangkok, Thailand
 
 ---
 
 ## 🎓 Supported by
 
-![https://c2f.chula.ac.th/](img/C2F-LOGO.png)
+![C2F](img/C2F-LOGO.png)
 
 ---
 
