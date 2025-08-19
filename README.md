@@ -80,7 +80,8 @@ pip install chula
 ### 🧪 Try in Google Colab
 
 Instantly test CHULA loss with YOLOv8 + Medical Pills dataset:
-👉 [Open CHULA Colab Notebook](https://colab.research.google.com/github/kaopanboonyuen/notebook/CHULA_LOSS_withMedicalPillsDetection.ipynb)
+👉 [Open CHULA Colab Notebook](https://colab.research.google.com/github/kaopanboonyuen/CHULA/notebook/CHULA_LOSS_withMedicalPillsDetection.ipynb
+)
 
 ---
 
