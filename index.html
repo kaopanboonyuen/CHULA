@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CHULA: Custom Heuristic Uncertainty-guided Loss for Accurate Land Title Deed Segmentation 📝</title>
+<title>CHULA: Custom Heuristic Uncertainty-guided Loss for Accurate Land Title Deed Segmentation 🚀</title>
 
 <!-- Favicon -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><text x='0' y='48' font-size='48'>📝</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><text x='0' y='48' font-size='48'>🚀</text></svg>">
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -223,6 +223,20 @@ pre code {
 
 <div class="container">
 
+<section style="text-align: center; margin-bottom: 40px; animation: fadeInSection 0.8s ease-in;">
+  <h2>🔬 Try CHULA in Google Colab</h2>
+  <p>Experience CHULA Loss on a real-world use case — <strong>YOLOv8 + Medical Pills Detection</strong>.</p>
+  <a class="button" href="https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withMedicalPillsDetection.ipynb" target="_blank" rel="noopener noreferrer">
+    🚀 Open Colab Demo
+  </a>
+  <p style="max-width: 700px; margin: 20px auto 0; font-size: 0.95rem; color: #666;">
+    <em>📜 Due to restrictions around Thai Land Title Deed data access and distribution, we demonstrate CHULA on an open, public dataset (medical pills) to highlight its plug-and-play flexibility and generalization power.</em>
+  </p>
+</section>
+
+
+<div class="container">
+
   <section class="project-description">
     <div class="text">
       <p><strong>CHULA</strong> is a novel <em>Custom Heuristic Uncertainty-guided Loss</em> designed for highly accurate segmentation and detection of Thai land title deeds. It uniquely combines:</p>
@@ -279,9 +293,13 @@ pre code {
 
   <section>
     <h2>⚙️ Integrate CHULA into Your Own Model</h2>
-    <pre><code>from chula_loss import CHULALoss
+    <pre><code>from chula.loss import CHULALoss
+from chula.utils import compute_class_weights
 
-loss_fn = CHULALoss(class_freqs, lambda_ce=1.0, lambda_unc=0.4, lambda_heu=0.6)
+# Auto-detect binary vs multi-class & compute weights
+class_weights = compute_class_weights("datasets/medical-pills", num_classes=1).cuda()
+
+loss_fn = CHULALoss(class_weights=class_weights, lambda_ce=1.0, lambda_unc=0.3, lambda_heu=0.5)
 loss = loss_fn(pred_logits, targets, uncertainty_map)
     </code></pre>
   </section>
