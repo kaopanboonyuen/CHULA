@@ -124,6 +124,26 @@ datasets/
 
 ---
 
+## 🖼️ Accuracy vs Efficiency Trade-off
+![Accuracy Efficiency Trade-off](img/Accuracy-efficiency-trade-off.png)
+
+## ⏱️ Inference Latency Comparison
+![Inference Latency Comparison for YOLO](img/Inference_latency_comparison_for_YOLO_graph.png)
+
+## 🛰️ Dataset Sample
+![Sample Dataset](img/Sample_Dataset_01.png)
+
+## ✅ Sample Output with CHULA
+![CHULA Segmentation Result](img/Sample_Result_from_CHULA.png)
+
+## 📈 Overall CHULA Performance
+![CHULA Efficiency and Accuracy Comparison](img/CHULA_Efficiency_and_overall_accuracy_comparison.png)
+
+## 🔁 Convergence & FLOP Efficiency
+![Convergence and Component Effects with FLOP Result](img/Convergence_and_Component_Effects_and_FLOP_result.png)
+
+---
+
 ## 🧠 Citation
 
 ```latex
