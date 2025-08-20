@@ -1,8 +1,9 @@
-torch>=2.0.0
-torchvision>=0.15.0
-numpy
-Pillow
-pyyaml
-matplotlib
-opencv-python
-tqdm
+torch==2.0.0
+torchvision==0.15.0
+numpy==1.24.2
+Pillow==9.4.0
+pyyaml==6.0
+matplotlib==3.7.1
+opencv-python==4.7.0.72
+tqdm==4.65.0
+ultralytics==8.3.181
