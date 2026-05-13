@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CHULA: Custom Heuristic Uncertainty-guided Loss for Accurate Land Title Deed Segmentation 🦁</title>
+
+<!-- Favicon -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><text x='0' y='48' font-size='48'>🦁</text></svg>">
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<!-- Styles -->
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7fa;
+    color: #333;
+    animation: fadeInBody 1s ease-in-out;
+  }
+  @keyframes fadeInBody {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  header {
+    background-color: #1d3557;
+    color: white;
+    padding: 35px 30px 40px 30px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+  .author p {
+    font-size: 1rem;
+    margin: 10px;
+    color: #e1e7f0;
+    user-select: none;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+  .author p strong {
+    color: white;
+  }
+  .container {
+    max-width: 960px;
+    padding: 25px 20px 40px 20px;
+    margin: auto;
+  }
+  section {
+    margin-bottom: 40px;
+    animation: fadeInSection 0.8s ease-in;
+  }
+  @keyframes fadeInSection {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .project-description .text {
+    max-width: 900px;
+    margin: auto;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #222;
+  }
+  .project-description p {
+    margin-bottom: 10px;
+  }
+  .project-description ul {
+    padding-left: 1.6em;
+    margin-bottom: 10px;
+  }
+  h2, h3 {
+    color: #1d3557;
+    margin-bottom: 12px;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+  }
+  img:hover {
+    transform: scale(1.02);
+  }
+  pre {
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  .button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 22px;
+    background-color: #e63946;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+  }
+  .button:hover {
+    background-color: #f1faee;
+    color: #1d3557;
+  }
+  footer {
+    background-color: #1d3557;
+    color: white;
+    text-align: center;
+    padding: 20px 15px;
+    font-size: 0.9rem;
+  }
+  footer a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  footer a:hover {
+    text-decoration: underline;
+  }
+  ul {
+    line-height: 1.8;
+  }
+  .images {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  /* Responsive tweaks */
+  @media (max-width: 600px) {
+    header h1,
+    .author p {
+      white-space: normal;
+    }
+    .project-description .text {
+      max-width: 100%;
+      padding: 0 10px;
+    }
+  }
+  pre {
+  background: #f5f7fa;
+  padding: 18px 22px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Fira Code', Consolas, Monaco, 'Courier New', monospace;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #2c3e50;
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.1);
+  border: 1px solid #d1dbe5;
+  user-select: text;
+  white-space: pre-wrap; /* allows line breaks if needed */
+  word-wrap: break-word;
+}
+pre code {
+  background: none; /* remove background from code inside pre */
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.scholarship-logo {
+  text-align: center;
+  margin: 40px 0 60px 0;
+}
+
+.scholarship-logo h2 {
+  color: #1d3557;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.scholarship-logo .logo-container {
+  max-width: 960px;  /* same as container max-width */
+  margin: auto;
+}
+
+.scholarship-logo .logo-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+  cursor: default;
+}
+
+.scholarship-logo .logo-container img:hover {
+  transform: scale(1.02);
+}
+
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>
+  CHULA: Custom Heuristic Uncertainty-guided Loss<br />
+  for Accurate Land Title Deed Segmentation 📝
+</h1>
+  <div class="author">
+    <p><strong>Teerapong Panboonyuen</strong></p>
+    <p>Supported by the Second Century Fund (C2F) Postdoctoral Fellowship, Chulalongkorn University</p>
+
+    <p>
+      <a href="LICENSE" target="_blank" rel="noopener noreferrer">
+        <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" />
+      </a>
+    </p>
+  </div>
+</header>
+
+<div class="container">
+
+<section style="text-align: center; margin-bottom: 40px; animation: fadeInSection 0.8s ease-in;">
+  <h2>🔬 Try CHULA in Google Colab</h2>
+  <p>Experience the power of <strong>CHULA Loss</strong> with <strong>YOLOv8, v11, v12, or newer</strong> on real-world datasets.</p>
+  
+  <div style="margin-top: 20px;">
+    <a class="button" href="https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withMedicalPillsDetection.ipynb" target="_blank" rel="noopener noreferrer">
+      💊 Medical Pills Detection Demo
+    </a>
+    <br><br>
+    <a class="button" href="https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withAfricanWildlifeDetection.ipynb" target="_blank" rel="noopener noreferrer">
+      🐘 African Wildlife Detection Demo (Multi-class)
+    </a>
+  </div>
+
+  <p style="max-width: 720px; margin: 30px auto 0; font-size: 0.95rem; color: #666;">
+    <em>💡 CHULA supports both <strong>binary</strong> and <strong>multi-class detection</strong>, and is plug-and-play with YOLOv8+, including the latest versions (v11, v12+).  
+    <br><br>
+    📜 Due to data access restrictions on Thai Land Title Deeds, public datasets like medical pills and African wildlife are used to demonstrate CHULA’s domain-agnostic capabilities.</em>
+  </p>
+</section>
+
+<div class="container">
+
+  <section class="project-description">
+    <div class="text">
+      <p><strong>CHULA</strong> is a novel <em>Custom Heuristic Uncertainty-guided Loss</em> designed for highly accurate segmentation and detection of Thai land title deeds. It uniquely combines:</p>
+      
+      <ul>
+        <li>Class-balanced cross-entropy loss</li>
+        <li>Aleatoric uncertainty modeling</li>
+        <li>Domain-specific heuristic priors</li>
+      </ul>
+      <p>This loss can be seamlessly integrated with <strong>any</strong> segmentation or detection model (e.g., YOLOv12, DeepLabv3+) to improve performance on noisy, ambiguous, and structure-rich document images.</p>
+      <p><strong>🚀 Achieved 61.3% mAP (AP<sub>50:95</sub>) on a real-world Thai land deed benchmark — significantly outperforming standard baselines.</strong></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>🎯 Key Contributions</h2>
+    <ul>
+      <li>✅ Unified loss combining uncertainty, class balance, and document heuristics</li>
+      <li>✅ Support for low-resource, underrepresented classes (e.g., PIN, STAMP)</li>
+      <li>✅ Full training & plug-and-play code for YOLO, DeepLab, and more</li>
+      <li>✅ Multi-task learning support (segmentation + detection)</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🖼️ Accuracy vs Efficiency Trade-off</h2>
+    <img src="img/Accuracy-efficiency-trade-off.png" alt="Accuracy Efficiency Trade-off" />
+  </section>
+
+  <section>
+    <h2>⏱️ Inference Latency Comparison</h2>
+    <img src="img/Inference_latency_comparison_for_YOLO_graph.png" alt="Inference Latency Comparison for YOLO" />
+  </section>
+
+  <section>
+    <h2>🛰️ Dataset Sample</h2>
+    <img src="img/Sample_Dataset_01.png" alt="Sample Dataset" />
+  </section>
+
+  <section>
+    <h2>✅ Sample Output with CHULA</h2>
+    <img src="img/Sample_Result_from_CHULA.png" alt="CHULA Segmentation Result" />
+  </section>
+
+  <section>
+    <h2>📈 Overall CHULA Performance</h2>
+    <img src="img/CHULA_Efficiency_and_overall_accuracy_comparison.png" alt="CHULA Efficiency and Accuracy Comparison" />
+  </section>
+
+  <section>
+    <h2>🔁 Convergence & FLOP Efficiency</h2>
+    <img src="img/Convergence_and_Component_Effects_and_FLOP_result.png" alt="Convergence and Component Effects with FLOP Result" />
+  </section>
+
+  <section>
+    <h2>⚙️ Integrate CHULA into Your Own Model</h2>
+    <pre><code>from chula.loss import CHULALoss
+from chula.utils import compute_class_weights
+
+# Auto-detect binary vs multi-class & compute weights
+class_weights = compute_class_weights("datasets/medical-pills", num_classes=1).cuda()
+
+loss_fn = CHULALoss(class_weights=class_weights, lambda_ce=1.0, lambda_unc=0.3, lambda_heu=0.5)
+loss = loss_fn(pred_logits, targets, uncertainty_map)
+    </code></pre>
+  </section>
+
+  <section>
+    <h2>🧠 Citation</h2>
+    <p>If you use this work, please cite:</p>
+    <pre><code>@article{panboonyuen2025chula,
+  title={CHULA: Custom Heuristic Uncertainty-guided Loss for Accurate Land Title Deed Segmentation},
+  author={Panboonyuen, Teerapong},
+  year={2025}
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>🛠️ How to Use</h2>
+    <pre><code>git clone https://github.com/kaopanboonyuen/CHULA.git
+cd CHULA
+pip install -r requirements.txt
+
+python train.py --config config.yaml
+    </code></pre>
+    <p><strong>Directory format example:</strong></p>
+    <pre><code>data/
+├── train/
+│   ├── images/
+│   └── masks/
+├── val/
+│   ├── images/
+│   └── masks/
+    </code></pre>
+  </section>
+
+<section style="text-align: center;">
+  <h2>🛠️ Development & Research Lead</h2>
+  <p>
+    <strong>Teerapong Panboonyuen</strong><br />
+    📧 <a href="mailto:teerapong.pa@chula.ac.th">teerapong.pa@chula.ac.th</a><br />
+    📍 Chulalongkorn University, Bangkok, Thailand
+  </p>
+</section>
+
+
+<section class="scholarship-logo">
+  <h2>🎓 Supported by</h2>
+  <div class="logo-container">
+    <img src="img/C2F-LOGO.png" alt="Second Century Fund (C2F) Postdoctoral Fellowship Logo" />
+  </div>
+</section>
+
+
+<footer>
+  <p>© 2025 Teerapong Panboonyuen</p>
+</footer>
+
+</body>
+</html>
