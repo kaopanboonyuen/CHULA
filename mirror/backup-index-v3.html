@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CHULA: Custom Heuristic Uncertainty-guided Loss for Accurate Land Title Deed Segmentation</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><text x='0' y='48' font-size='48'>🦁</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Figtree:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --white:        #ffffff;
+  --off-white:    #fafaf9;
+  --gray-50:      #f7f7f6;
+  --gray-100:     #eeeeec;
+  --gray-200:     #ddddd9;
+  --gray-400:     #9c9c96;
+  --gray-600:     #5c5c58;
+  --gray-800:     #2a2a27;
+  --black:        #111110;
+  --ink:          #1a1a18;
+  --ink-mid:      #44443f;
+  --ink-light:    #7a7a74;
+  --accent:       #c0392b;
+  --font-serif:   'Lora', Georgia, serif;
+  --font-sans:    'Figtree', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+  --max-w:        780px;
+  --max-w-wide:   1020px;
+  --r:            8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--gray-100);
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-brand {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em;
+  color: var(--ink-light); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+
+/* HERO */
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 80px 40px 64px;
+  animation: fadeUp 0.7s ease both;
+}
+.venue-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.68rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 28px;
+}
+.venue-tag::before {
+  content: ''; display: inline-block;
+  width: 24px; height: 1px; background: var(--accent);
+}
+h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 700; line-height: 1.2;
+  letter-spacing: -0.01em; color: var(--black); margin-bottom: 12px;
+}
+h1 em { font-style: italic; color: var(--accent); }
+.title-acronym {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  color: var(--ink-light); letter-spacing: 0.14em; margin-bottom: 36px;
+}
+.author-block {
+  display: flex; flex-direction: column; gap: 4px;
+  padding-top: 28px; border-top: 1px solid var(--gray-100); margin-bottom: 36px;
+}
+.author-name {
+  font-family: var(--font-serif); font-size: 1.05rem;
+  font-weight: 500; color: var(--ink);
+}
+.author-affil { font-size: 0.85rem; color: var(--ink-light); font-style: italic; }
+.result-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--off-white); border: 1px solid var(--gray-200);
+  border-left: 3px solid var(--accent); border-radius: 4px;
+  padding: 12px 20px; font-size: 0.875rem; color: var(--ink-mid);
+  margin-bottom: 36px; line-height: 1.4; white-space: nowrap;
+  flex-wrap: nowrap;
+}
+.result-badge strong { font-family: var(--font-serif); font-size: 1.1rem; color: var(--accent); }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 20px; font-family: var(--font-sans);
+  font-size: 0.82rem; font-weight: 500; text-decoration: none;
+  border-radius: 5px; transition: all 0.2s ease; cursor: pointer; border: none;
+}
+.btn-red { background: var(--accent); color: #fff; }
+.btn-red:hover { background: #a93226; transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--ink-mid); border: 1px solid var(--gray-200); }
+.btn-ghost:hover { border-color: var(--gray-400); color: var(--ink); transform: translateY(-1px); }
+
+/* DIVIDER */
+.rule { max-width: var(--max-w-wide); margin: 0 auto; height: 1px; background: var(--gray-100); }
+
+/* SECTIONS */
+.section { max-width: var(--max-w); margin: 0 auto; padding: 64px 40px; }
+.section-wide { max-width: var(--max-w-wide); margin: 0 auto; padding: 64px 40px; }
+.section-label {
+  font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-light);
+  margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+}
+.section-label::after { content: ''; height: 1px; width: 36px; background: var(--gray-200); }
+h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 600; line-height: 1.25; color: var(--black); margin-bottom: 20px;
+}
+.body-text { font-size: 1rem; color: var(--ink-mid); line-height: 1.85; margin-bottom: 16px; }
+.body-text strong { color: var(--ink); font-weight: 600; }
+
+/* STATS */
+.stats-strip { background: var(--off-white); border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); }
+.stats-inner {
+  max-width: var(--max-w-wide); margin: 0 auto; padding: 0 40px;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+}
+.stat-cell {
+  padding: 36px 24px; text-align: center;
+  border-right: 1px solid var(--gray-100);
+}
+.stat-cell:last-child { border-right: none; }
+.stat-num {
+  font-family: var(--font-serif); font-size: 2.4rem;
+  font-weight: 700; color: var(--black); line-height: 1; margin-bottom: 6px;
+}
+.stat-num span { color: var(--accent); }
+.stat-desc {
+  font-size: 0.75rem; font-family: var(--font-mono);
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light);
+}
+
+/* CONTRIBUTIONS */
+.contrib-list {
+  display: flex; flex-direction: column; gap: 1px;
+  border: 1px solid var(--gray-100); border-radius: var(--r); overflow: hidden;
+}
+.contrib-item {
+  display: flex; align-items: flex-start; gap: 20px;
+  background: var(--white); padding: 24px 28px;
+  border-bottom: 1px solid var(--gray-100); transition: background 0.2s;
+}
+.contrib-item:last-child { border-bottom: none; }
+.contrib-item:hover { background: var(--off-white); }
+.contrib-num {
+  font-family: var(--font-mono); font-size: 0.68rem;
+  color: var(--accent); padding-top: 3px; flex-shrink: 0; width: 28px;
+}
+.contrib-body h3 {
+  font-family: var(--font-sans); font-size: 0.92rem;
+  font-weight: 600; color: var(--ink); margin-bottom: 5px;
+}
+.contrib-body p { font-size: 0.875rem; color: var(--ink-light); line-height: 1.7; }
+
+/* FORMULA */
+.formula-box {
+  background: var(--off-white); border: 1px solid var(--gray-200);
+  border-radius: var(--r); padding: 36px 40px; margin-bottom: 28px;
+  font-family: var(--font-mono); text-align: center;
+}
+.formula-eq {
+  font-size: clamp(0.9rem, 2vw, 1.15rem); color: var(--ink);
+  letter-spacing: 0.03em; margin-bottom: 24px; line-height: 2;
+}
+.f-L  { color: var(--black); font-weight: 500; }
+.f-ce  { color: #1a6b9a; }
+.f-unc { color: #b07d2a; }
+.f-heu { color: #2e7d4f; }
+.f-lam { color: var(--ink-light); }
+.formula-legend {
+  display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;
+  border-top: 1px solid var(--gray-200); padding-top: 20px;
+}
+.leg-item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--ink-mid); }
+.leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* FIGURES */
+.figure {
+  margin-bottom: 32px; border: 1px solid var(--gray-100);
+  border-radius: var(--r); overflow: hidden; transition: box-shadow 0.25s;
+}
+.figure:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+.figure img { width: 100%; height: auto; display: block; transition: transform 0.4s ease; }
+.figure:hover img { transform: scale(1.005); }
+.figure-cap {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 16px 22px; border-top: 1px solid var(--gray-100); background: var(--off-white);
+}
+.fig-label {
+  font-family: var(--font-mono); font-size: 0.65rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); flex-shrink: 0; padding-top: 2px;
+}
+.fig-text { font-size: 0.82rem; color: var(--ink-light); line-height: 1.6; }
+.figures-2up { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+
+/* CODE */
+.code-wrap {
+  border: 1px solid var(--gray-200); border-radius: var(--r);
+  overflow: hidden; margin-bottom: 24px; font-family: var(--font-mono);
+}
+.code-top {
+  background: var(--gray-50); border-bottom: 1px solid var(--gray-100);
+  padding: 10px 18px; display: flex; align-items: center; justify-content: space-between;
+}
+.code-dots { display: flex; gap: 6px; }
+.cd { width: 10px; height: 10px; border-radius: 50%; }
+.cd:nth-child(1) { background: #f0a8a8; }
+.cd:nth-child(2) { background: #f0d4a8; }
+.cd:nth-child(3) { background: #a8d4a8; }
+.code-fname { font-size: 0.68rem; letter-spacing: 0.1em; color: var(--ink-light); }
+.code-body {
+  background: #fcfcfb; padding: 24px; font-size: 0.82rem;
+  line-height: 1.9; color: var(--ink); overflow-x: auto; white-space: pre;
+}
+.ck  { color: #1a6b9a; }
+.cc  { color: #2e7d4f; }
+.cn  { color: #b07d2a; }
+.cm  { color: var(--gray-400); font-style: italic; }
+.cls { color: #7b4fa6; }
+
+/* CITATION */
+.cite-box {
+  border: 1px solid var(--gray-200); border-left: 3px solid var(--ink);
+  border-radius: 4px; background: var(--off-white);
+  padding: 24px 28px; font-family: var(--font-mono);
+  font-size: 0.82rem; line-height: 2; color: var(--ink-mid);
+}
+.ck2 { color: var(--black); font-weight: 500; }
+.cf  { color: #1a6b9a; }
+.cv  { color: #2e7d4f; }
+
+/* CONTACT */
+.contact-strip {
+  background: var(--off-white);
+  border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100);
+}
+.contact-inner {
+  max-width: var(--max-w-wide); margin: 0 auto; padding: 44px 40px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;
+}
+.contact-info h3 { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; margin-bottom: 4px; }
+.contact-info p { font-size: 0.875rem; color: var(--ink-light); }
+.contact-info a { color: var(--accent); text-decoration: none; }
+.contact-info a:hover { text-decoration: underline; }
+.pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill {
+  font-family: var(--font-mono); font-size: 0.65rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-light); border: 1px solid var(--gray-200);
+  border-radius: 100px; padding: 5px 13px;
+}
+
+/* DEMO STRIP */
+.demo-strip { background: var(--black); padding: 52px 40px; text-align: center; }
+.demo-strip h2 { color: var(--white); font-family: var(--font-serif); font-size: 1.7rem; margin-bottom: 12px; }
+.demo-strip p { color: rgba(255,255,255,0.5); font-size: 0.9rem; max-width: 500px; margin: 0 auto 32px; }
+.demo-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-white { background: #fff; color: var(--black); font-weight: 600; }
+.btn-white:hover { background: #f0f0f0; transform: translateY(-1px); }
+.btn-outline-white {
+  background: transparent; color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.btn-outline-white:hover { border-color: rgba(255,255,255,0.5); color: #fff; transform: translateY(-1px); }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--gray-100); padding: 24px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px; font-size: 0.78rem; color: var(--ink-light);
+}
+footer a { color: var(--ink-light); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+
+/* ANIMATION */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.08s; }
+.d2 { transition-delay: 0.16s; }
+.d3 { transition-delay: 0.24s; }
+.d4 { transition-delay: 0.32s; }
+
+/* RESPONSIVE */
+@media (max-width: 700px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero, .section, .section-wide { padding-left: 24px; padding-right: 24px; }
+  .stats-inner { grid-template-columns: 1fr 1fr; }
+  .stat-cell:nth-child(2) { border-right: none; }
+  .figures-2up { grid-template-columns: 1fr; }
+  .contact-inner { flex-direction: column; }
+  footer { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">CHULA · 2025</div>
+  <ul class="nav-links">
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#contributions">Contributions</a></li>
+    <li><a href="#method">Method</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#code">Code</a></li>
+    <li><a href="#citation">Citation</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="venue-tag">Research Paper · 2025</div>
+
+  <h1>
+    <em>CHULA</em>: Custom Heuristic<br>
+    Uncertainty-guided Loss for<br>
+    Accurate Land Title Deed Segmentation
+  </h1>
+  <div class="title-acronym">C · H · U · L · A — Custom Heuristic Uncertainty-guided Loss for Accurate Segmentation</div>
+
+  <div class="author-block">
+    <span class="author-name">Teerapong Panboonyuen</span>
+    <span class="author-affil">Second Century Fund (C2F) Postdoctoral Fellow · Chulalongkorn University, Bangkok, Thailand</span>
+  </div>
+
+  <div class="result-badge">
+    🏆 &nbsp; Achieved <strong>61.3%</strong> mAP (AP₅₀₋₉₅) &mdash; outperforming all standard baselines on Thai land deed benchmark
+  </div>
+
+  <div class="hero-actions">
+    <a class="btn btn-red" href="https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withMedicalPillsDetection.ipynb" target="_blank" rel="noopener">
+      💊 Colab Demo
+    </a>
+    <a class="btn btn-ghost" href="https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withAfricanWildlifeDetection.ipynb" target="_blank" rel="noopener">
+      🐘 Wildlife Demo
+    </a>
+    <a class="btn btn-ghost" href="https://github.com/kaopanboonyuen/CHULA" target="_blank" rel="noopener">
+      ⚙ GitHub
+    </a>
+  </div>
+</header>
+
+<div class="rule"></div>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-cell reveal">
+      <div class="stat-num">61<span>.3%</span></div>
+      <div class="stat-desc">mAP AP₅₀₋₉₅</div>
+    </div>
+    <div class="stat-cell reveal d1">
+      <div class="stat-num">3</div>
+      <div class="stat-desc">Loss Components</div>
+    </div>
+    <div class="stat-cell reveal d2">
+      <div class="stat-num" style="font-size:1.7rem;">v12+</div>
+      <div class="stat-desc">YOLO Compatible</div>
+    </div>
+    <div class="stat-cell reveal d3">
+      <div class="stat-num" style="font-size:1.7rem;">C2F</div>
+      <div class="stat-desc">Chula Fellowship</div>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ABSTRACT -->
+<div id="abstract" class="section">
+  <div class="section-label reveal">Abstract</div>
+  <h2 class="reveal d1">A unified loss for document image understanding</h2>
+  <p class="body-text reveal d2">
+    <strong>CHULA</strong> is a novel <em>Custom Heuristic Uncertainty-guided Loss</em> designed for highly accurate segmentation and detection of Thai land title deed documents. It uniquely combines <strong>class-balanced cross-entropy</strong>, <strong>aleatoric uncertainty modeling</strong>, and <strong>domain-specific heuristic priors</strong> into a single differentiable objective.
+  </p>
+  <p class="body-text reveal d2">
+    The loss integrates seamlessly with any modern backbone — including YOLOv8, v11, v12, and DeepLabv3+ — delivering consistent performance gains on noisy, ambiguous, and structure-rich document imagery, particularly for underrepresented categories such as PIN markers and official seals (STAMP).
+  </p>
+</div>
+
+<div class="rule"></div>
+
+<!-- CONTRIBUTIONS -->
+<div id="contributions" class="section">
+  <div class="section-label reveal">Key Contributions</div>
+  <h2 class="reveal d1">What CHULA introduces</h2>
+
+  <div class="contrib-list reveal d2">
+    <div class="contrib-item">
+      <span class="contrib-num">01</span>
+      <div class="contrib-body">
+        <h3>Unified Loss Function</h3>
+        <p>A single objective combining uncertainty, class balance, and document heuristics — no auxiliary tricks or multi-stage training required.</p>
+      </div>
+    </div>
+    <div class="contrib-item">
+      <span class="contrib-num">02</span>
+      <div class="contrib-body">
+        <h3>Low-resource Class Recovery</h3>
+        <p>Engineered to regain precision on rare semantic classes like PIN markers and seals, where standard cross-entropy catastrophically under-performs.</p>
+      </div>
+    </div>
+    <div class="contrib-item">
+      <span class="contrib-num">03</span>
+      <div class="contrib-body">
+        <h3>Plug-and-play Integration</h3>
+        <p>Drop-in replacement for standard loss in YOLO, DeepLabv3+, and beyond. Two lines of Python — no architectural changes needed.</p>
+      </div>
+    </div>
+    <div class="contrib-item">
+      <span class="contrib-num">04</span>
+      <div class="contrib-body">
+        <h3>Multi-task Learning Support</h3>
+        <p>Native support for joint segmentation and detection objectives in a single training run, enabling richer document representation learning.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- METHOD -->
+<div id="method" class="section">
+  <div class="section-label reveal">Methodology</div>
+  <h2 class="reveal d1">The CHULA loss formulation</h2>
+  <p class="body-text reveal d2">Three complementary terms, each targeting a distinct failure mode in document image segmentation, combined into a single principled objective.</p>
+
+  <div class="formula-box reveal d2">
+    <div class="formula-eq">
+      <span class="f-L">ℒ<sub>CHULA</sub></span>
+      &nbsp;=&nbsp;
+      <span class="f-lam">λ<sub>ce</sub></span><span class="f-ce">&thinsp;·&thinsp;ℒ<sub>CE</sub></span>
+      &nbsp;+&nbsp;
+      <span class="f-lam">λ<sub>unc</sub></span><span class="f-unc">&thinsp;·&thinsp;ℒ<sub>UNC</sub></span>
+      &nbsp;+&nbsp;
+      <span class="f-lam">λ<sub>heu</sub></span><span class="f-heu">&thinsp;·&thinsp;ℒ<sub>HEU</sub></span>
+    </div>
+    <div class="formula-legend">
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#1a6b9a"></div>
+        <span><strong style="color:#1a6b9a">ℒ<sub>CE</sub></strong> — Class-balanced cross-entropy &nbsp;(λ = 1.0)</span>
+      </div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#b07d2a"></div>
+        <span><strong style="color:#b07d2a">ℒ<sub>UNC</sub></strong> — Aleatoric uncertainty penalty &nbsp;(λ = 0.3)</span>
+      </div>
+      <div class="leg-item">
+        <div class="leg-dot" style="background:#2e7d4f"></div>
+        <span><strong style="color:#2e7d4f">ℒ<sub>HEU</sub></strong> — Domain heuristic prior &nbsp;(λ = 0.5)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- RESULTS -->
+<div id="results" class="section-wide">
+  <div class="section-label reveal">Results</div>
+  <h2 class="reveal d1">Experimental evaluation</h2>
+  <p class="body-text reveal d2" style="max-width:620px; margin-bottom:40px;">
+    Comprehensive assessment across accuracy, efficiency, and convergence on real-world Thai land title deed data.
+  </p>
+
+  <div class="figure reveal">
+    <img src="img/Accuracy-efficiency-trade-off.png" alt="Accuracy–Efficiency Trade-off" loading="lazy" />
+    <div class="figure-cap">
+      <span class="fig-label">Fig. 1</span>
+      <span class="fig-text">Accuracy–efficiency trade-off. CHULA achieves a superior Pareto frontier, outperforming all baseline configurations on both mAP and inference cost axes.</span>
+    </div>
+  </div>
+
+  <div class="figure reveal">
+    <img src="img/Inference_latency_comparison_for_YOLO_graph.png" alt="Inference Latency Comparison" loading="lazy" />
+    <div class="figure-cap">
+      <span class="fig-label">Fig. 2</span>
+      <span class="fig-text">Inference latency comparison across YOLO family variants. CHULA adds negligible overhead while consistently boosting detection accuracy.</span>
+    </div>
+  </div>
+
+  <div class="figures-2up">
+    <div class="figure reveal d1">
+      <img src="img/Sample_Dataset_01.png" alt="Dataset Sample" loading="lazy" />
+      <div class="figure-cap">
+        <span class="fig-label">Fig. 3</span>
+        <span class="fig-text">Representative samples from the Thai land title deed benchmark dataset.</span>
+      </div>
+    </div>
+    <div class="figure reveal d2">
+      <img src="img/Sample_Result_from_CHULA.png" alt="CHULA Segmentation Output" loading="lazy" />
+      <div class="figure-cap">
+        <span class="fig-label">Fig. 4</span>
+        <span class="fig-text">Sample segmentation outputs from CHULA on unseen test documents.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="figure reveal">
+    <img src="img/CHULA_Efficiency_and_overall_accuracy_comparison.png" alt="Overall CHULA Performance" loading="lazy" />
+    <div class="figure-cap">
+      <span class="fig-label">Fig. 5</span>
+      <span class="fig-text">Overall CHULA efficiency and accuracy comparison across all evaluation splits.</span>
+    </div>
+  </div>
+
+  <div class="figure reveal">
+    <img src="img/Convergence_and_Component_Effects_and_FLOP_result.png" alt="Convergence and FLOP" loading="lazy" />
+    <div class="figure-cap">
+      <span class="fig-label">Fig. 6</span>
+      <span class="fig-text">Convergence curves, per-component ablation, and FLOP efficiency analysis validating each term of the CHULA loss.</span>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- CODE -->
+<div id="code" class="section">
+  <div class="section-label reveal">Implementation</div>
+  <h2 class="reveal d1">Quick integration</h2>
+  <p class="body-text reveal d2">Designed for frictionless adoption into any YOLO or segmentation training loop.</p>
+
+  <div class="code-wrap reveal d2">
+    <div class="code-top">
+      <div class="code-dots"><div class="cd"></div><div class="cd"></div><div class="cd"></div></div>
+      <span class="code-fname">chula_integration.py</span>
+    </div>
+    <div class="code-body"><span class="ck">from</span> chula.loss <span class="ck">import</span> <span class="cls">CHULALoss</span>
+<span class="ck">from</span> chula.utils <span class="ck">import</span> compute_class_weights
+
+<span class="cm"># Auto-detect binary vs multi-class & compute weights</span>
+class_weights = compute_class_weights(
+    <span class="cc">"datasets/medical-pills"</span>, num_classes=<span class="cn">1</span>
+).cuda()
+
+<span class="cm"># Instantiate with tunable component weights</span>
+loss_fn = <span class="cls">CHULALoss</span>(
+    class_weights=class_weights,
+    lambda_ce=<span class="cn">1.0</span>,
+    lambda_unc=<span class="cn">0.3</span>,
+    lambda_heu=<span class="cn">0.5</span>
+)
+
+<span class="cm"># Drop-in replacement for standard criterion</span>
+loss = loss_fn(pred_logits, targets, uncertainty_map)</div>
+  </div>
+
+  <div class="code-wrap reveal d3">
+    <div class="code-top">
+      <div class="code-dots"><div class="cd"></div><div class="cd"></div><div class="cd"></div></div>
+      <span class="code-fname">quickstart.sh</span>
+    </div>
+    <div class="code-body"><span class="cm"># Clone & install</span>
+git clone https://github.com/kaopanboonyuen/CHULA.git
+cd CHULA && pip install -r requirements.txt
+
+<span class="cm"># Launch training</span>
+python train.py --config config.yaml</div>
+  </div>
+
+  <div class="code-wrap reveal d3">
+    <div class="code-top">
+      <div class="code-dots"><div class="cd"></div><div class="cd"></div><div class="cd"></div></div>
+      <span class="code-fname">data/ layout</span>
+    </div>
+    <div class="code-body">data/
+├── train/
+│   ├── images/     <span class="cm"># input imagery</span>
+│   └── masks/      <span class="cm"># ground-truth masks</span>
+└── val/
+    ├── images/
+    └── masks/</div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- DEMO STRIP -->
+<div class="demo-strip">
+  <h2>Try CHULA in Google Colab</h2>
+  <p>Plug-and-play demos on public datasets demonstrating CHULA's domain-agnostic capabilities.</p>
+  <div class="demo-btns">
+    <a class="btn btn-white" href="https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withMedicalPillsDetection.ipynb" target="_blank" rel="noopener">
+      💊 Medical Pills Detection
+    </a>
+    <a class="btn btn-outline-white" href="https://colab.research.google.com/github/kaopanboonyuen/CHULA/blob/main/notebook/CHULA_LOSS_withAfricanWildlifeDetection.ipynb" target="_blank" rel="noopener">
+      🐘 African Wildlife (Multi-class)
+    </a>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- CITATION -->
+<div id="citation" class="section">
+  <div class="section-label reveal">Citation</div>
+  <h2 class="reveal d1">Cite this work</h2>
+  <p class="body-text reveal d2">If CHULA contributes to your research, please cite:</p>
+
+  <div class="cite-box reveal d2"><span class="ck2">@article</span>{<span class="cv">panboonyuen2025chula</span>,
+  <span class="cf">title</span>   = {CHULA: Custom Heuristic Uncertainty-guided Loss
+             for Accurate Land Title Deed Segmentation},
+  <span class="cf">author</span>  = {<span class="cv">Panboonyuen, Teerapong</span>},
+  <span class="cf">year</span>    = {<span class="cv">2025</span>}
+}</div>
+</div>
+
+<div class="rule"></div>
+
+<!-- CONTACT -->
+<div class="contact-strip">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <h3>Teerapong Panboonyuen</h3>
+      <p>📧 <a href="mailto:teerapong.pa@chula.ac.th">teerapong.pa@chula.ac.th</a></p>
+      <p style="margin-top:3px;">📍 Chulalongkorn University, Bangkok, Thailand</p>
+    </div>
+    <div class="pill-row">
+      <span class="pill">MIT License</span>
+      <span class="pill">C2F Fellow</span>
+      <span class="pill">Chula 2025</span>
+    </div>
+  </div>
+</div>
+
+<!-- C2F LOGO -->
+<div class="section-wide" style="padding-top: 48px; padding-bottom: 64px;">
+  <div class="section-label reveal">Supported by</div>
+  <div class="figure reveal d1" style="max-width: 680px;">
+    <img src="img/C2F-LOGO.png" alt="Second Century Fund (C2F) Postdoctoral Fellowship" loading="lazy" />
+    <div class="figure-cap">
+      <span class="fig-label">C2F</span>
+      <span class="fig-text">Second Century Fund (C2F) Postdoctoral Fellowship, Chulalongkorn University.</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Teerapong Panboonyuen &nbsp;·&nbsp; <a href="https://github.com/kaopanboonyuen/CHULA" target="_blank">github.com/kaopanboonyuen/CHULA</a></span>
+  <span>MIT License</span>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
