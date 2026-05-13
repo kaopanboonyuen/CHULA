@@ -144,7 +144,9 @@ datasets/
 ![Sample Dataset](img/Sample_Dataset_01.png)
 
 ## ✅ Sample Output with CHULA
-![CHULA Segmentation Result](img/Sample_Result_from_CHULA.png)
+![CHULA Segmentation Result 01](img/SAMPLE_RESULT_CHULA_01.png)
+![CHULA Segmentation Result 02](img/SAMPLE_RESULT_CHULA_02.png)
+![CHULA Segmentation Result 03](img/SAMPLE_RESULT_CHULA_03.png)
 
 ## 📈 Overall CHULA Performance
 ![CHULA Efficiency and Accuracy Comparison](img/CHULA_Efficiency_and_overall_accuracy_comparison.png)
