@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CHULA | IEEE Access 2025</title>
+<title>CHULA | National Land Deed AI</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
@@ -606,6 +606,472 @@ video{width:100%;display:block;}
 
 .impact-text p{color:var(--muted);font-size:14px;line-height:1.65;}
 
+/* ── GALLERY SHOWCASE ────────────────────────────────── */
+
+/* challenge bar */
+.challenge-bar{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:64px;
+}
+
+.challenge-pill{
+  padding:20px 22px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  transition:all 0.3s var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+
+.challenge-pill::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(255,77,109,0.08),transparent);
+  opacity:0;
+  transition:opacity 0.3s;
+}
+
+.challenge-pill:hover::before{opacity:1;}
+.challenge-pill:hover{border-color:rgba(255,77,109,0.25);transform:translateY(-3px);}
+
+.challenge-pill-icon{font-size:20px;margin-bottom:8px;display:block;}
+
+.challenge-pill h5{
+  font-family:'Syne',sans-serif;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:4px;
+  color:var(--text);
+}
+
+.challenge-pill p{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+/* mission banner */
+.mission-banner{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:28px 36px;
+  background:linear-gradient(135deg,rgba(0,212,255,0.06),rgba(124,92,255,0.06));
+  border:1px solid rgba(0,212,255,0.15);
+  border-radius:20px;
+  margin-bottom:56px;
+}
+
+.mission-flag{font-size:36px;flex-shrink:0;}
+
+.mission-banner p{
+  font-size:16px;
+  color:#c0d0f0;
+  line-height:1.6;
+}
+
+.mission-banner p strong{
+  color:var(--cyan);
+  font-weight:700;
+}
+
+/* result cards — full-width image, text below */
+.result-stack{
+  display:flex;
+  flex-direction:column;
+  gap:56px;
+}
+
+.result-card{
+  display:flex;
+  flex-direction:column;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:28px;
+  transition:all 0.4s var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+
+.result-card:hover{
+  border-color:rgba(124,92,255,0.28);
+  box-shadow:0 32px 100px rgba(0,0,0,0.5);
+  transform:translateY(-5px);
+}
+
+/* top accent line */
+.result-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:2px;
+  z-index:2;
+}
+.result-card:nth-child(1)::before{background:linear-gradient(90deg,transparent,#7c5cff,#00d4ff,transparent);}
+.result-card:nth-child(2)::before{background:linear-gradient(90deg,transparent,#00d4ff,#00ffa3,transparent);}
+.result-card:nth-child(3)::before{background:linear-gradient(90deg,transparent,#ffd166,#ff4d6d,transparent);}
+
+.result-img-col{
+  position:relative;
+  overflow:hidden;
+  background:#04060f;
+  border-bottom:1px solid var(--border);
+  width:100%;
+}
+
+.result-img-col img{
+  width:100%;
+  display:block;
+  transition:transform 0.7s var(--ease);
+  max-height:520px;
+  object-fit:cover;
+  object-position:top center;
+}
+
+.result-card:hover .result-img-col img{transform:scale(1.015);}
+
+/* scanline sweep on hover */
+.result-img-col::after{
+  content:'';
+  position:absolute;
+  top:-100%;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,transparent,rgba(0,212,255,0.7),rgba(124,92,255,0.5),transparent);
+  pointer-events:none;
+}
+.result-card:hover .result-img-col::after{
+  animation:scanline 1.4s var(--ease) forwards;
+}
+@keyframes scanline{
+  0%{top:-3px;}
+  100%{top:101%;}
+}
+
+.result-index{
+  position:absolute;
+  top:16px;left:16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:1.5px;
+  padding:5px 13px;
+  border-radius:8px;
+  background:rgba(3,5,15,0.75);
+  border:1px solid rgba(255,255,255,0.1);
+  color:var(--muted);
+  backdrop-filter:blur(10px);
+  z-index:1;
+}
+
+/* confidence overlay badge */
+.result-conf{
+  position:absolute;
+  bottom:16px;right:16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  padding:5px 13px;
+  border-radius:8px;
+  background:rgba(0,255,163,0.12);
+  border:1px solid rgba(0,255,163,0.25);
+  color:var(--green);
+  backdrop-filter:blur(10px);
+  z-index:1;
+}
+
+.result-info-col{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  padding:28px 32px 32px;
+}
+
+.result-info-header{
+  display:flex;
+  align-items:baseline;
+  gap:16px;
+}
+
+.result-num{
+  font-family:'Syne',sans-serif;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:2px;
+  color:var(--dim);
+  font-variant-numeric:tabular-nums;
+}
+
+.result-info-col h3{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(17px,2vw,22px);
+  font-weight:700;
+  letter-spacing:-0.5px;
+  line-height:1.2;
+}
+
+.result-info-col p{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.75;
+  max-width:900px;
+}
+
+.result-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:4px;
+}
+
+.rtag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:1px;
+  padding:4px 12px;
+  border-radius:999px;
+  border:1px solid;
+  text-transform:uppercase;
+}
+
+.rtag-violet{color:#b8a8ff;border-color:rgba(124,92,255,0.3);background:rgba(124,92,255,0.08);}
+.rtag-cyan{color:#7de8ff;border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.06);}
+.rtag-green{color:#7dffc6;border-color:rgba(0,255,163,0.3);background:rgba(0,255,163,0.06);}
+.rtag-rose{color:#ffaab8;border-color:rgba(255,77,109,0.3);background:rgba(255,77,109,0.06);}
+.rtag-gold{color:#ffd166;border-color:rgba(255,209,102,0.3);background:rgba(255,209,102,0.06);}
+
+@media(max-width:768px){
+  .challenge-bar{grid-template-columns:1fr 1fr;}
+  .result-info-col{padding:22px 20px 24px;}
+  .result-img-col img{max-height:280px;}
+}
+/* ── ACKNOWLEDGEMENT ─────────────────────────────────── */
+.ack-card{
+  border:1px solid var(--border);
+  border-radius:32px;
+  overflow:hidden;
+  background:var(--surface);
+  position:relative;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.ack-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--cyan) 70%,transparent);
+}
+
+/* TOP */
+.ack-card-top{
+  display:flex;
+  gap:40px;
+  align-items:center;
+  justify-content:center;
+
+  padding:44px 48px 28px;
+
+  width:100%;
+  max-width:980px;
+}
+
+/* LOGO */
+.ack-logo-box{
+  flex-shrink:0;
+  width:132px;
+  height:92px;
+
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,0.08);
+
+  background:#ffffff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden;
+  padding:12px 16px;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+.ack-logo-box img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+.ack-logo-fallback{
+  font-family:'Syne',sans-serif;
+  font-size:20px;
+  font-weight:800;
+  color:#c2185b;
+  letter-spacing:-1px;
+}
+
+/* META */
+.ack-card-meta{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  text-align:left;
+  max-width:640px;
+}
+
+.ack-grant-tag{
+  display:inline-flex;
+  width:fit-content;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+
+  color:var(--gold);
+  background:rgba(255,209,102,0.1);
+  border:1px solid rgba(255,209,102,0.2);
+
+  padding:5px 14px;
+  border-radius:999px;
+}
+
+.ack-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(20px,2.6vw,30px);
+  font-weight:800;
+  letter-spacing:-0.8px;
+  line-height:1.15;
+  color:var(--text);
+  margin:0;
+}
+
+.ack-inst{
+  font-size:14px;
+  color:var(--muted);
+  font-weight:500;
+}
+
+/* DIVIDER */
+.ack-divider{
+  height:1px;
+  width:100%;
+
+  max-width:980px;
+
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+}
+
+/* BODY */
+.ack-body{
+  padding:28px 44px 32px;
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.85;
+
+  max-width:880px;
+  text-align:center;
+}
+
+.ack-body strong{
+  color:#e8d8a8;
+  font-weight:600;
+}
+
+/* STATS (MODERN GRID → instead of separators) */
+.ack-stat-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+
+  gap:24px;
+
+  padding:0 44px 40px;
+
+  width:100%;
+  max-width:980px;
+}
+
+.ack-stat{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+
+  gap:6px;
+
+  padding:18px 12px;
+
+  border-radius:16px;
+
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.05);
+
+  transition:0.25s ease;
+}
+
+.ack-stat:hover{
+  transform:translateY(-3px);
+  background:rgba(255,255,255,0.04);
+}
+
+.ack-stat-num{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(20px,2.4vw,28px);
+  font-weight:800;
+  letter-spacing:-1px;
+  line-height:1;
+
+  background:linear-gradient(135deg,#fff,#b8a8ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.ack-stat-label{
+  font-size:11px;
+  color:var(--muted);
+  letter-spacing:0.5px;
+  font-family:'JetBrains Mono',monospace;
+  text-transform:uppercase;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+  .ack-card-top{
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:28px 24px 18px;
+    gap:18px;
+  }
+
+  .ack-card-meta{
+    align-items:center;
+    text-align:center;
+  }
+
+  .ack-divider{
+    margin:0;
+  }
+
+  .ack-body{
+    padding:20px 24px 26px;
+  }
+
+  .ack-stat-row{
+    grid-template-columns:repeat(2,1fr);
+    padding:0 24px 28px;
+    gap:16px;
+  }
+}
+
 /* ── TAKEAWAY ─────────────────────────────────────────── */
 .takeaway-block{
   max-width:900px;
@@ -786,10 +1252,12 @@ footer a:hover{color:var(--text);}
       <a href="#overview">Overview</a>
       <a href="#method">Method</a>
       <a href="#results">Results</a>
+      <a href="#showcase">Gallery</a>
       <a href="#impact">Impact</a>
+      <a href="#acknowledgement">Funding</a>
       <a href="#citation">Citation</a>
     </div>
-    <div class="nav-badge">IEEE Access · 2025</div>
+    <div class="nav-badge">National Land Deed AI · 2026</div>
   </div>
 </nav>
 
@@ -798,7 +1266,7 @@ footer a:hover{color:var(--text);}
   <div class="hero-content">
     <div class="venue-tag">
       <span class="tag-icon"></span>
-      IEEE Access · 2025 · Chulalongkorn University
+      National Land Deed AI · 2026 · Chulalongkorn University
     </div>
 
     <h1>
@@ -1011,6 +1479,237 @@ footer a:hover{color:var(--text);}
 
 <div class="divider"></div>
 
+<!-- ── RESULTS GALLERY ────────────────────────────────── -->
+<section class="section" id="showcase">
+  <div class="section-header reveal">
+    <div class="section-eyebrow">06 · Visual Results</div>
+    <h2>Qualification Results</h2>
+    <p>
+      Real Thai land title deeds — processed at national scale.<br>
+      Every bounding box is a field extracted by CHULA under extreme real-world degradation.
+    </p>
+  </div>
+
+  <!-- Mission Banner -->
+  <div class="mission-banner reveal">
+    <div class="mission-flag">🇹🇭</div>
+    <p>
+      Thailand holds over <strong>30 million land title deeds</strong> in physical archives.
+      CHULA was built to digitize them — accurately, automatically, and at scale.
+      This is not just a research model. This is <strong>national infrastructure</strong>.
+    </p>
+  </div>
+
+  <!-- Challenge Pills -->
+  <div class="challenge-bar reveal">
+    <div class="challenge-pill">
+      <span class="challenge-pill-icon">🌀</span>
+      <h5>Degraded Scans</h5>
+      <p>Decades-old documents with fading ink, yellowing paper, and scan noise</p>
+    </div>
+    <div class="challenge-pill">
+      <span class="challenge-pill-icon">✍️</span>
+      <h5>Handwriting Overlay</h5>
+      <p>Manual annotations and stamps blending with printed cadastral text</p>
+    </div>
+    <div class="challenge-pill">
+      <span class="challenge-pill-icon">🗺️</span>
+      <h5>Complex Layouts</h5>
+      <p>Multi-field structured forms with irregular boundary coordinates</p>
+    </div>
+    <div class="challenge-pill">
+      <span class="challenge-pill-icon">⚖️</span>
+      <h5>Zero Tolerance</h5>
+      <p>Legal documents — a single wrong field can invalidate land ownership records</p>
+    </div>
+  </div>
+
+  <!-- Result Cards -->
+  <div class="result-stack">
+
+    <!-- Result 01 -->
+    <div class="result-card reveal">
+      <div class="result-img-col">
+        <img src="img/SAMPLE_RESULT_CHULA_01.png"
+             alt="CHULA detection result on Thai land title deed sample 01">
+        <span class="result-index">SAMPLE_01</span>
+        <span class="result-conf">↑ High Confidence Fields</span>
+      </div>
+      <div class="result-info-col">
+        <div class="result-info-header">
+          <span class="result-num">01 ──</span>
+          <h3>Cadastral Boundary &amp; PIN Detection</h3>
+        </div>
+        <p>
+          A degraded Chiang Rai land deed with overlapping handwritten marks
+          and an official circular stamp. CHULA successfully localizes
+          <strong style="color:var(--text);">PIN fields, side-land measurements,
+          north arrow, export date and year</strong> — all under severe visual noise.
+          Note the high confidence scores even on occluded fields.
+        </p>
+        <div class="result-tags">
+          <span class="rtag rtag-violet">PIN_OCR</span>
+          <span class="rtag rtag-cyan">SIDE_LANDS_OCR</span>
+          <span class="rtag rtag-green">NORTH_OBB</span>
+          <span class="rtag rtag-rose">EXPORT_DATE</span>
+          <span class="rtag rtag-gold">EXPORT_YEAR</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result 02 -->
+    <div class="result-card reveal" style="transition-delay:0.08s">
+      <div class="result-img-col">
+        <img src="img/SAMPLE_RESULT_CHULA_02.png"
+             alt="CHULA detection result on Thai land title deed sample 02">
+        <span class="result-index">SAMPLE_02</span>
+        <span class="result-conf">24+ Fields Detected</span>
+      </div>
+      <div class="result-info-col">
+        <div class="result-info-header">
+          <span class="result-num">02 ──</span>
+          <h3>Complex Parcel Layout — Multiple Neighbor Fields</h3>
+        </div>
+        <p>
+          A Chiang Rai parcel with an irregular polygon boundary and
+          dense text distribution around the perimeter. CHULA detects
+          <strong style="color:var(--text);">PIN nodes along each boundary segment,
+          land-scale metadata, and neighbor parcel labels</strong>
+          (SIDE_LANDS_OCR) with robust localization despite layout complexity.
+        </p>
+        <div class="result-tags">
+          <span class="rtag rtag-violet">PIN_OCR ×24</span>
+          <span class="rtag rtag-cyan">LANDS_SCALE</span>
+          <span class="rtag rtag-green">OBJECT_OVERLAY</span>
+          <span class="rtag rtag-rose">NORTH_OBB</span>
+          <span class="rtag rtag-gold">EXPORT_YEAR 0.81</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result 03 -->
+    <div class="result-card reveal" style="transition-delay:0.16s">
+      <div class="result-img-col">
+        <img src="img/SAMPLE_RESULT_CHULA_03.png"
+             alt="CHULA detection result on Thai land title deed sample 03">
+        <span class="result-index">SAMPLE_03</span>
+        <span class="result-conf">40+ Fields Detected</span>
+      </div>
+      <div class="result-info-col">
+        <div class="result-info-header">
+          <span class="result-num">03 ──</span>
+          <h3>High-Density Field Detection — Urban Parcel</h3>
+        </div>
+        <p>
+          The most challenging case: a dense urban parcel map
+          with dozens of PIN coordinate fields, multiple SIDE_LANDS
+          neighbor annotations, and a partially visible north arrow.
+          CHULA achieves <strong style="color:var(--text);">high-confidence detections
+          across 40+ fields simultaneously</strong>, demonstrating scalability
+          to the most complex cadastral documents in the national archive.
+        </p>
+        <div class="result-tags">
+          <span class="rtag rtag-violet">40+ Fields</span>
+          <span class="rtag rtag-cyan">OBJECT_LANDS_OCR</span>
+          <span class="rtag rtag-green">SIDE_LANDS_OCR</span>
+          <span class="rtag rtag-rose">NORTH_OBB 0.91</span>
+          <span class="rtag rtag-gold">EXPORT 0.88</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── ACKNOWLEDGEMENT ───────────────────────────────────── -->
+<section class="section" id="acknowledgement">
+  <div class="section-header reveal">
+    <div class="section-eyebrow">07 · Funding</div>
+    <h2>Acknowledgement</h2>
+    <p>
+      This research was supported by a prestigious postdoctoral fellowship
+      enabling frontier AI for national infrastructure.
+    </p>
+  </div>
+
+  <div class="ack-card reveal">
+
+    <!-- TOP -->
+    <div class="ack-card-top">
+
+      <!-- LOGO -->
+      <div class="ack-logo-box">
+        <img src="img/C2F-LOGO.png"
+             alt="C2F — The Second Century Fund, Chulalongkorn University"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+
+        <div class="ack-logo-fallback" style="display:none;">C2F</div>
+      </div>
+
+      <!-- META -->
+      <div class="ack-card-meta">
+        <div class="ack-grant-tag">
+          Research Grant · PostDoc Fellowship
+        </div>
+
+        <h3 class="ack-title">
+          The Second Century Fund (C2F)<br>
+          PostDoctoral Fellowship
+        </h3>
+
+        <div class="ack-inst">
+          Chulalongkorn University, Thailand
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ack-divider"></div>
+
+    <!-- BODY -->
+    <p class="ack-body">
+      This work was supported by the
+      <strong>C2F (The Second Century Fund) PostDoctoral Fellowship Program</strong>
+      at Chulalongkorn University.
+
+      C2F accelerates frontier AI research bridging academic excellence with
+      national-scale real-world deployment — enabling CHULA to move from
+      laboratory research to
+      <strong>public digital infrastructure</strong>
+      serving all of Thailand.
+    </p>
+
+    <!-- STATS -->
+    <div class="ack-stat-row">
+
+      <div class="ack-stat">
+        <span class="ack-stat-num">30M+</span>
+        <span class="ack-stat-label">Land deeds targeted</span>
+      </div>
+
+      <div class="ack-stat">
+        <span class="ack-stat-num">IEEE</span>
+        <span class="ack-stat-label">Access 2025</span>
+      </div>
+
+      <div class="ack-stat">
+        <span class="ack-stat-num">92.6%</span>
+        <span class="ack-stat-label">OCR accuracy</span>
+      </div>
+
+      <div class="ack-stat">
+        <span class="ack-stat-num">🇹🇭</span>
+        <span class="ack-stat-label">National impact</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- ── TAKEAWAY ────────────────────────────────────────── -->
 <section class="section">
   <div class="takeaway-block reveal">
@@ -1028,7 +1727,7 @@ footer a:hover{color:var(--text);}
 <!-- ── CITATION ───────────────────────────────────────── -->
 <section class="section" id="citation">
   <div class="section-header reveal">
-    <div class="section-eyebrow">06 · Citation</div>
+    <div class="section-eyebrow">08 · Citation</div>
     <h2>BibTeX</h2>
     <p>Cite our work if you find it useful for your research.</p>
   </div>
