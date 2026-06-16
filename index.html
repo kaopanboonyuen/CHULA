@@ -1242,24 +1242,62 @@ footer a:hover{color:var(--text);}
 <canvas id="bg-canvas"></canvas>
 
 <!-- ── NAV ────────────────────────────────────────────── -->
+<!-- ── NAV ────────────────────────────────────────────── -->
+
 <nav>
   <div class="nav-container">
-    <div class="logo">
-      <span class="logo-dot"></span>
-      CHULA
-    </div>
-    <div class="nav-links">
-      <a href="#overview">Overview</a>
-      <a href="#method">Method</a>
-      <a href="#results">Results</a>
-      <a href="#showcase">Gallery</a>
-      <a href="#impact">Impact</a>
-      <a href="#acknowledgement">Funding</a>
-      <a href="#citation">Citation</a>
-    </div>
-    <div class="nav-badge">National Land Deed AI · 2026</div>
+
+<!-- Logo (click to scroll to top) -->
+<a href="#" class="logo" id="logo-link">
+  <span class="logo-dot"></span>
+  CHULA
+</a>
+
+<div class="nav-links">
+  <a href="#overview">Overview</a>
+  <a href="#method">Method</a>
+  <a href="#results">Results</a>
+  <a href="#showcase">Gallery</a>
+  <a href="#impact">Impact</a>
+  <a href="#acknowledgement">Funding</a>
+  <a href="#citation">Citation</a>
+</div>
+
+<div class="nav-badge">National Land Deed AI · 2026</div>
+
   </div>
 </nav>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const logo = document.getElementById("logo-link");
+
+    logo.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  });
+</script>
+
 
 <!-- ── HERO ───────────────────────────────────────────── -->
 <section class="hero">
